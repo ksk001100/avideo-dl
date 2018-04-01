@@ -9,7 +9,7 @@ def main():
     parser.add_argument('url', help='Specify URL')
     parser.add_argument('-t', '--thread', help='Specify the number of threads',
                         type=int, default=10,
-                        choices=[1, 10, 30, 50, 80, 100])
+                        choices=range(100))
     args = parser.parse_args()
     print(ascii_moji['start'] + '\r')
     av = AVideoDownloader(args.url, args.thread)
