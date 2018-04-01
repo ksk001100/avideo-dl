@@ -8,6 +8,10 @@ class URLExtractor(object):
     }
 
     def get_url(self, url):
+        """Get video url
+        :param str url: Site URL
+        :return: Video URL
+        """
         if 'xvideos' in url:
             return self.__xvideos_video_url(url)
         elif 'pornhub' in url:
@@ -26,12 +30,20 @@ class URLExtractor(object):
             raise ValueError("This site is not supported.")
 
     def __xvideos_video_url(self, url):
+        """Extract video url from XVideos
+        :param str url: Site URL
+        :return: Tuple with string video url and string title
+        """
         html = str(urllib.request.urlopen(url).read())
         title = re.findall(r'(?<=page-title">).*?(?=<)', html)[0]
         video_url = re.findall(r"(?<=setVideoUrlHigh\(\\').*?(?=\\')", html)[0]
         return video_url, title
 
     def __pornhub_video_url(self, url):
+        """Extract video url from Pornhub
+        :param str url: Site URL
+        :return: Tuple with string video url and string title
+        """
         request = urllib.request.Request(url=url, headers=self.headers)
         html = str(urllib.request.urlopen(request).read())
         title = re.findall(r'(?<=inlineFree">).*?(?=<)', html)[0]
@@ -40,6 +52,10 @@ class URLExtractor(object):
         return video_url, title
 
     def __sharevideos_video_url(self, url):
+        """Extract video url from Share Videos
+        :param str url: Site URL
+        :return: Tuple with string video url and string title
+        """
         from datetime import datetime
         title = 'share-videos' + datetime.now().strftime('%Y%m%d%H%M%S')
         request = urllib.request.Request(url=url, headers=self.headers)
@@ -52,6 +68,10 @@ class URLExtractor(object):
         return video_url, title
 
     def __tube8_video_url(self, url):
+        """Extract video url from Tube8
+        :param str url: Site URL
+        :return: Tuple with string video url and string title
+        """
         request = urllib.request.Request(url=url, headers=self.headers)
         html = str(urllib.request.urlopen(request).read())
         title = re.findall(r'(?<=<span class="item">).*?(?=<)', html)[0]
@@ -60,6 +80,10 @@ class URLExtractor(object):
         return video_url, title
 
     def __redtube_video_url(self, url):
+        """Extract video url from RedTube
+        :param str url: Site URL
+        :return: Tuple with string video url and string title
+        """
         html = str(urllib.request.urlopen(url).read())
         title = re.findall(r'(?<=video_title_text">).*?(?=<)', html)[0]
         video_url = re.findall(r'(?<=videoUrl":").*?(?=")',
@@ -67,6 +91,10 @@ class URLExtractor(object):
         return video_url, title
 
     def __xhamster_video_url(self, url):
+        """Extract video url from xHamster
+        :param str url: Site URL
+        :return: Tuple with string video url and string title
+        """
         html = str(urllib.request.urlopen(url).read())
         title = re.findall(
             r'(?<=entity-info-container__title" itemprop="name">).*?(?=<)', html)[0]
@@ -75,4 +103,8 @@ class URLExtractor(object):
         return video_url, title
 
     def __vjav_video_url(self, url):
+        """Extract video url from Vjav
+        :param str url: Site URL
+        :return: Tuple with string video url and string title
+        """
         pass

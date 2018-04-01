@@ -8,6 +8,10 @@ from .extractor import URLExtractor
 
 class AVideoDownloader(URLExtractor):
     def __init__(self, url, split_num=10):
+        """Initialization
+        :param str url: Video site URL
+        :param int split_num: Thread num
+        """
         self.url = url
         self.split_num = split_num
         self.title = None
@@ -17,6 +21,11 @@ class AVideoDownloader(URLExtractor):
         self.video_url, self.title = self.get_url(url)
 
     def split_download(self, num, start, end):
+        """Split download
+        :param int num: Split number
+        :param int start: Range start
+        :param int end: Range end
+        """
         req = urllib.request.Request(self.video_url)
         req.headers['Range'] = 'bytes=%s-%s' % (start, end)
         while True:
@@ -39,12 +48,14 @@ class AVideoDownloader(URLExtractor):
             file.write(binary)
 
     def single_download(self):
+        """Single download"""
         def progress(block_count, block_size, total_size):
             percentage = 100.0 * block_count * block_size / total_size
             sys.stdout.write("%.2f %% ( %d KB )\r" % (percentage, total_size / 1024))
         urllib.request.urlretrieve(self.video_url, "{}.mp4".format(self.title), progress)
 
     def download(self):
+        """Download"""
         try:
             info = urllib.request.urlopen(self.video_url).info()
             self.total_length = int(info.get('content-length'))
@@ -85,6 +96,9 @@ class AVideoDownloader(URLExtractor):
         self.combine(self.title)
 
     def combine(self, file_name):
+        """Combine split file
+        :param str file_name: file name
+        """
         tmp_list = []
         with open("%s.%s" % (file_name, self.file_type), "wb") as file:
             for i in range(self.split_num):
