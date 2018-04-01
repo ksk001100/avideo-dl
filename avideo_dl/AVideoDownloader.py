@@ -19,6 +19,7 @@ class AVideoDownloader(URLExtractor):
         self.total_length = None
         self.file_count = 0
         self.video_url, self.title = self.get_url(url)
+        print('title : {}\nvideo_url : {}\n'.format(self.title, self.video_url))
 
     def split_download(self, num, start, end):
         """Split download
@@ -58,6 +59,12 @@ class AVideoDownloader(URLExtractor):
         """Download"""
         try:
             info = urllib.request.urlopen(self.video_url).info()
+            self.total_length = int(info.get('content-length'))
+            self.file_type = info.get('content-type').split('/')[-1]
+        except urllib.error.HTTPError:
+            req = urllib.request.Request(self.video_url)
+            req.headers.update(self.headers)
+            info = urllib.request.urlopen(req).info()
             self.total_length = int(info.get('content-length'))
             self.file_type = info.get('content-type').split('/')[-1]
         except AttributeError:
