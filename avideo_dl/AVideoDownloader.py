@@ -6,6 +6,7 @@ from multiprocessing import cpu_count
 from queue import Queue
 import os
 from .extractor import URLExtractor
+from .aa import ascii_moji
 
 
 class AVideoDownloader:
@@ -14,7 +15,7 @@ class AVideoDownloader:
         :param str url: Video site URL
         """
         self.url = url
-        self.split_num = 1000
+        self.split_num = 100
         self.title = None
         self.file_type = None
         self.total_length = None
@@ -23,7 +24,7 @@ class AVideoDownloader:
         self.video_url, self.title = self.extractor.get_url(url)
         print('title : {}\nvideo_url : {}\n'.format(self.title, self.video_url))
 
-    def split_download(self, queue: Queue):
+    def split_download(self, queue):
         """Split download
         :param Queue queue: Queue
         """
@@ -51,6 +52,14 @@ class AVideoDownloader:
                     continue
             with open("%s.toyota" % num, "wb") as file:
                 file.write(binary)
+                self.file_count += 1
+                p_count = int(100 * self.file_count / self.split_num)
+                progress = "=" * p_count
+                space = " " * (100 - p_count)
+                arrow = ">"
+                print("\r[{}{}{}]{}%".format(
+                    progress, arrow, space,
+                    int(self.file_count * (100 / self.split_num))), end='')
             queue.task_done()
 
     def single_download(self):
@@ -66,16 +75,21 @@ class AVideoDownloader:
             info = urllib.request.urlopen(self.video_url).info()
             self.total_length = int(info.get('content-length'))
             self.file_type = info.get('content-type').split('/')[-1]
+            self.split_num = self.total_length // 300000
         except urllib.error.HTTPError:
             req = urllib.request.Request(self.video_url)
             req.headers.update(self.extractor.headers)
             info = urllib.request.urlopen(req).info()
             self.total_length = int(info.get('content-length'))
             self.file_type = info.get('content-type').split('/')[-1]
+            self.split_num = self.total_length // 300000
         except AttributeError:
             print('start single download')
             self.single_download()
             exit()
+
+        print('Use cpu thread count: ', cpu_count())
+        print('Split count: ', self.split_num, '\n')
 
         queue = Queue()
         total_count = 0
@@ -100,15 +114,9 @@ class AVideoDownloader:
 
         for thread in threads:
             thread.join()
-            self.file_count += 1
-            progress = "=" * int(self.file_count)
-            space = " " * (self.split_num - int(self.file_count))
-            arrow = ">"
-            sys.stdout.write("[{}{}{}{}%]\r".format(
-                progress, arrow, space, int(self.file_count * (100 / self.split_num))))
-            sys.stdout.flush()
 
         self.combine(self.title)
+        return str(round(os.path.getsize(self.title + '.' + self.file_type) / (1024.0 ** 2), 1)) + 'MB'
 
     def combine(self, file_name):
         """Combine split file
