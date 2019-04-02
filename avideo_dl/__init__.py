@@ -11,10 +11,10 @@ def main():
     print(ascii_moji['start'] + '\r')
     av = AVideoDownloader(args.url)
     try:
-        av.download()
+        file_size = av.download()
     except KeyboardInterrupt:
         os.system('rm *.toyota')
-    print('\n\n{}\n\n'.format(ascii_moji['finish']))
+    print('\n\nDownloaded file size: ', file_size, '\n')
 
 
 if __name__ == '__main__':
