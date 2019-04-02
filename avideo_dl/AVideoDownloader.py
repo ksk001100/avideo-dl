@@ -12,7 +12,6 @@ class AVideoDownloader:
     def __init__(self, url):
         """Initialization
         :param str url: Video site URL
-        :param int split_num: Thread num
         """
         self.url = url
         self.split_num = 1000
