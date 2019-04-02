@@ -1,52 +1,58 @@
 import urllib.request
 import urllib.error
 import sys
-import threading
+from threading import Thread
+from multiprocessing import cpu_count
+from queue import Queue
 import os
 from .extractor import URLExtractor
 
 
-class AVideoDownloader(URLExtractor):
-    def __init__(self, url, split_num=10):
+class AVideoDownloader:
+    def __init__(self, url):
         """Initialization
         :param str url: Video site URL
         :param int split_num: Thread num
         """
         self.url = url
-        self.split_num = split_num
+        self.split_num = 1000
         self.title = None
         self.file_type = None
         self.total_length = None
         self.file_count = 0
-        self.video_url, self.title = self.get_url(url)
+        self.extractor = URLExtractor()
+        self.video_url, self.title = self.extractor.get_url(url)
         print('title : {}\nvideo_url : {}\n'.format(self.title, self.video_url))
 
-    def split_download(self, num, start, end):
+    def split_download(self, queue: Queue):
         """Split download
-        :param int num: Split number
-        :param int start: Range start
-        :param int end: Range end
+        :param Queue queue: Queue
         """
-        req = urllib.request.Request(self.video_url)
-        req.headers['Range'] = 'bytes=%s-%s' % (start, end)
         while True:
-            try:
-                res = urllib.request.urlopen(req)
+            num, start, end = queue.get()
+            if num is None:
                 break
-            except urllib.error.HTTPError:
-                req.headers.update(self.headers)
-                res = urllib.request.urlopen(req)
-                break
-            except Exception:
-                continue
-        while True:
-            try:
-                binary = res.read()
-                break
-            except Exception:
-                continue
-        with open("%s.toyota" % num, "wb") as file:
-            file.write(binary)
+            req = urllib.request.Request(self.video_url)
+            req.headers['Range'] = 'bytes=%s-%s' % (start, end)
+            while True:
+                try:
+                    res = urllib.request.urlopen(req)
+                    break
+                except urllib.error.HTTPError:
+                    req.headers.update(self.extractor.headers)
+                    res = urllib.request.urlopen(req)
+                    break
+                except Exception:
+                    continue
+            while True:
+                try:
+                    binary = res.read()
+                    break
+                except Exception:
+                    continue
+            with open("%s.toyota" % num, "wb") as file:
+                file.write(binary)
+            queue.task_done()
 
     def single_download(self):
         """Single download"""
@@ -63,7 +69,7 @@ class AVideoDownloader(URLExtractor):
             self.file_type = info.get('content-type').split('/')[-1]
         except urllib.error.HTTPError:
             req = urllib.request.Request(self.video_url)
-            req.headers.update(self.headers)
+            req.headers.update(self.extractor.headers)
             info = urllib.request.urlopen(req).info()
             self.total_length = int(info.get('content-length'))
             self.file_type = info.get('content-type').split('/')[-1]
@@ -71,24 +77,27 @@ class AVideoDownloader(URLExtractor):
             print('start single download')
             self.single_download()
             exit()
+
+        queue = Queue()
         total_count = 0
-        threads = []
         for i, val in enumerate([(self.total_length + j) // self.split_num for j in range(self.split_num)]):
             if i == 0:
                 last = val
-                thread = threading.Thread(
-                    target=self.split_download, args=(i, 0, last))
-                threads.append(thread)
                 total_count = val
+                queue.put((i, 0, last))
             else:
                 last = total_count + 1
                 total_count += val
-                thread = threading.Thread(
-                    target=self.split_download, args=(i, last, total_count))
-                threads.append(thread)
+                queue.put((i, last, total_count))
 
-        for thread in threads:
+        threads = []
+        for _ in range(cpu_count()):
+            thread = Thread(target=self.split_download, args=(queue,))
             thread.start()
+            threads.append(thread)
+
+        queue.join()
+        [queue.put((None, None, None)) for _ in range(len(threads))]
 
         for thread in threads:
             thread.join()
