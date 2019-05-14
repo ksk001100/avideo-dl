@@ -13,13 +13,6 @@ Specify URL as argument and download.
 $ avideo_dl <url>
 ```
 
-## Optional
-By specifying the number of threads you can download at high speed.
-
-```
-$ avideo_dl <url> --thread 100
-```
-
 ## Supported video sites
 - [XVideos](https://www.xvideos.com)
 - [Pornhub](https://jp.pornhub.com/)
