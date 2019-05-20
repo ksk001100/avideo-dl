@@ -3,8 +3,7 @@ This is adult video downloader.
 
 ## Installation
 ```
-$ git clone https://github.com/KeisukeToyota/avideo_dl ~/.avideo_dl
-$ chmod a+x ~/.avideo_dl/bin/
+$ pip install avideo_dl
 ```
 
 ## Usage

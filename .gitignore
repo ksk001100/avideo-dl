@@ -1,4 +1,5 @@
 __pycache__
-.idea
+.idea/
 .DS_Store
 *.mp4
+dist/
