@@ -6,8 +6,6 @@ import os
 import argparse
 from avideo_dl.aa import ascii_moji
 from avideo_dl.AVideoDownloader import AVideoDownloader
-#path = os.path.realpath(os.path.abspath(__file__))
-#sys.path.insert(0, os.path.dirname(os.path.dirname(path)))
 
 def main():
     parser = argparse.ArgumentParser()
