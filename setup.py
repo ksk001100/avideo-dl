@@ -32,7 +32,7 @@ setup(
     author_email='hm.pudding0715@gmail.com',
     maintainer='KeisukeToyota',
     maintainer_email='hm.pudding0715@gmail.com',
-    description='',
+    description='This is adult video downloader.',
     long_description=readme,
     packages=find_packages(),
     license="MIT",
