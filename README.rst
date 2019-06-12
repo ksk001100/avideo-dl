@@ -8,7 +8,7 @@ Installation
 
 ::
 
-    $ pip install avideo_dl
+    $ pip3 install avideo_dl
 
 Usage
 -----
