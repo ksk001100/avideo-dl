@@ -22,7 +22,7 @@ version = next((line.split('=')[1].strip().replace("'", '')
                                               'avideo_dl',
                                               '__init__.py'))
                 if line.startswith('__version__ = ')),
-               '0.0.1.1')
+               '0.0.1.2')
 
 setup(
     name="avideo_dl",
