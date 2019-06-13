@@ -1,7 +1,7 @@
 AVideo Downloader
 =================
 
-This is adult video downloader.
+Fast adult video downloader with no dependent third party libraries.
 
 Installation
 ------------
