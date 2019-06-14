@@ -3,3 +3,4 @@ __pycache__
 .DS_Store
 *.mp4
 dist/
+avideo_dl.egg-info/
