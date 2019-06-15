@@ -1,4 +1,4 @@
-# AVideo Downloader
+# avideo-dl
 [![Downloads](https://pepy.tech/badge/avideo-dl)](https://pepy.tech/project/avideo-dl)
 [![Downloads](https://pepy.tech/badge/avideo-dl/month)](https://pepy.tech/project/avideo-dl/month)
 [![Downloads](https://pepy.tech/badge/avideo-dl/week)](https://pepy.tech/project/avideo-dl/week)
