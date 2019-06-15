@@ -6,23 +6,23 @@ from multiprocessing import cpu_count
 from queue import Queue
 from threading import Thread
 
-from .aa import ascii_moji
-from .extractor import URLExtractor
+from avideo_dl.extractor import URLExtractor
 
 
 class AVideoDownloader:
+    split_num = 100
+    title = None
+    file_type = None
+    total_length = None
+    file_count = 0
+
     def __init__(self, url):
         """Initialization
         :param str url: Video site URL
         """
         self.url = url
-        self.split_num = 100
-        self.title = None
-        self.file_type = None
-        self.total_length = None
-        self.file_count = 0
-        self.extractor = URLExtractor()
-        self.video_url, self.title = self.extractor.get_url(url)
+        self.extractor = URLExtractor(url)
+        self.video_url, self.title = self.extractor.get_video_url()
         print('title : {}\nvideo_url : {}\n'.format(self.title,
                                                     self.video_url))
 
