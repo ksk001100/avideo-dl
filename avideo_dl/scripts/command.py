@@ -5,7 +5,7 @@ import os.path
 import os
 import argparse
 from avideo_dl.aa import ascii_moji
-from avideo_dl.AVideoDownloader import AVideoDownloader
+from avideo_dl.downloader import AVideoDownloader
 
 def main():
     parser = argparse.ArgumentParser()
