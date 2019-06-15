@@ -4,3 +4,4 @@ __pycache__
 *.mp4
 dist/
 avideo_dl.egg-info/
+build
