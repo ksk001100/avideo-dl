@@ -9,7 +9,7 @@ class URLExtractor(object):
 
     def get_video_url(self):
         return self.extractor.get_video_url(self.url)
-    
+
     def get_page_url(self):
         return self.extractor.get_video_url(self.url)
 
