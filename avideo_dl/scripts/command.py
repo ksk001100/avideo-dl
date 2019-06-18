@@ -18,7 +18,7 @@ def main():
     try:
         file_size = av.download()
     except KeyboardInterrupt:
-        os.system('rm *.toyota')
+        os.system('rm -rf *.tmp')
     print('\n\nDownloaded file size: ', file_size, '\n')
 
 if __name__ == '__main__':
