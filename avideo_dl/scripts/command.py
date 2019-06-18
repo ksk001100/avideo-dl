@@ -5,14 +5,16 @@ import os.path
 import os
 import argparse
 from avideo_dl.aa import ascii_moji
-from avideo_dl.downloader import AVideoDownloader
+from avideo_dl.downloader import Downloader
+from avideo_dl.extractor import URLExtractor
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('url', help='Specify URL')
     args = parser.parse_args()
+    video_url, title = URLExtractor(args.url).get_video_url()
     print(ascii_moji['start'] + '\r')
-    av = AVideoDownloader(args.url)
+    av = Downloader(video_url, title)
     try:
         file_size = av.download()
     except KeyboardInterrupt:
