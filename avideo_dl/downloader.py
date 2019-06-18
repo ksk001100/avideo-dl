@@ -22,7 +22,7 @@ class Downloader(object):
     def split_download(self, args):
         num, start, end = args
         req = urllib.request.Request(self.video_url)
-        req.headers['Range'] = 'bytes=%s-%s' % (start, end)
+        req.headers['Range'] = 'bytes={}-{}'.format(start, end)
         while True:
             try:
                 res = urllib.request.urlopen(req)
@@ -50,7 +50,7 @@ class Downloader(object):
         space = " " * (100 - p_count)
         arrow = ">"
         per = int(count.value * (100 / self.split_num))
-        print("\r[{}{}{}]{}%".format(progress, arrow, space, per), end='')
+        print("\r[{}{}{}] {}%".format(progress, arrow, space, per), end='')
 
     def download(self):
         try:
@@ -72,7 +72,7 @@ class Downloader(object):
              self.split_num for i in range(self.split_num)]
         args = [(i, i * val, sum(l[:i]) + val) for i, val in enumerate(l)]
 
-        p = Pool(processes=cpu_count() * 2,
+        p = Pool(processes=cpu_count(),
                  initializer=self.pool_init,
                  initargs=(Value('i', 0),))
         p.map(self.split_download, args)
@@ -89,7 +89,7 @@ class Downloader(object):
         shared_file_count = count
 
     def combine(self, file):
-        file.write(reduce(lambda x, y: x + y, self.binary_files()))
+        file.write(b''.join(self.binary_files()))
         os.system('rm *.tmp')
 
     def binary_files(self):
