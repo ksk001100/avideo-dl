@@ -2,6 +2,7 @@ import urllib.request
 import re
 from datetime import datetime
 
+from avideo_dl.utils import headers
 from avideo_dl.extractor.base import BaseExtractor
 
 

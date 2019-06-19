@@ -50,7 +50,7 @@ class Downloader(object):
         space = " " * (100 - p_count)
         arrow = ">"
         per = int(count.value * (100 / self.split_num))
-        print("\r[{}{}{}] {}%".format(progress, arrow, space, per), end='')
+        print("\r[{}{}{}] {}% ({}/{})".format(progress, arrow, space, per, count.value, self.split_num), end='')
 
     def download(self):
         try:
@@ -65,14 +65,15 @@ class Downloader(object):
         self.file_type = info.get('content-type').split('/')[-1]
         self.split_num = self.total_length // 300000
 
-        print('Use cpu thread count: ', cpu_count())
+        print('Use cpu thread count: ', cpu_count() * 2)
         print('Split count: ', self.split_num, '\n')
 
         l = [(self.total_length + i) //
              self.split_num for i in range(self.split_num)]
         args = [(i, i * val, sum(l[:i]) + val) for i, val in enumerate(l)]
+        print(args)
 
-        p = Pool(processes=cpu_count(),
+        p = Pool(processes=cpu_count() * 2,
                  initializer=self.pool_init,
                  initargs=(Value('i', 0),))
         p.map(self.split_download, args)
@@ -93,4 +94,4 @@ class Downloader(object):
         os.system('rm *.tmp')
 
     def binary_files(self):
-        return map(lambda f: f.read(), (open('{}.tmp'.format(i), 'rb') for i in range(self.split_num)))
+        return list(map(lambda f: f.read(), (open('{}.tmp'.format(i), 'rb') for i in range(self.split_num))))
