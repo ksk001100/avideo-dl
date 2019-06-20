@@ -70,7 +70,7 @@ class Downloader(object):
 
         l = [(self.total_length + i) //
              self.split_num for i in range(self.split_num)]
-        args = [(i, 0 if i == 0 else i * val + 1, sum(l[:i]) + val) for i, val in enumerate(l)]
+        args = [(i, 0 if i == 0 else sum(l[:i]) + 1, sum(l[:i]) + val) for i, val in enumerate(l)]
         print(args)
 
         p = Pool(processes=cpu_count() * 2,
