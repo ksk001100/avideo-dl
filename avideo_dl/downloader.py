@@ -65,15 +65,14 @@ class Downloader(object):
         self.file_type = info.get('content-type').split('/')[-1]
         self.split_num = self.total_length // 300000
 
-        print('Use cpu thread count: ', cpu_count() * 2)
+        print('Use cpu thread count: ', cpu_count())
         print('Split count: ', self.split_num, '\n')
 
         l = [(self.total_length + i) //
              self.split_num for i in range(self.split_num)]
         args = [(i, 0 if i == 0 else sum(l[:i]) + 1, sum(l[:i]) + val) for i, val in enumerate(l)]
-        print(args)
 
-        p = Pool(processes=cpu_count() * 2,
+        p = Pool(processes=cpu_count(),
                  initializer=self.pool_init,
                  initargs=(Value('i', 0),))
         p.map(self.split_download, args)
