@@ -1,5 +1,6 @@
 import urllib.request
 import re
+import os
 from datetime import datetime
 
 from avideo_dl.utils import headers
@@ -10,7 +11,7 @@ class PornhubExtractor(BaseExtractor):
     def get_video_url(cls, url):
         request = urllib.request.Request(url=url, headers=headers())
         html = urllib.request.urlopen(request).read().decode('utf-8')
-        title = re.findall(r'(?<=inlineFree">).*?(?=<)', html)[0]
+        title = next(iter(os.path.basename(__file__).split('.'))) + datetime.now().strftime('%Y%m%d%H%M%S')
         video_url = re.findall(
             r'(?<=videoUrl":").*?480P.*?(?=")', str(html))[0].replace('\\', '')
         return video_url, title + datetime.now().strftime('%Y%m%d%H%M%S')
