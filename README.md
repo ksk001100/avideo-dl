@@ -17,9 +17,9 @@ $ avideo_dl <url>
 ```
 
 ## Supported video sites
-- [XVideos](https://www.xvideos.com)
-- [Pornhub](https://jp.pornhub.com/)
-- [Share Videos](http://share-videos.se/)
-- [Tube8](https://www.tube8.com/)
-- [RedTube](https://www.redtube.com/)
-- [xHamster](https://jp.xhamster.com/)
+- [x] [XVideos](https://www.xvideos.com)
+- [x] [Pornhub](https://jp.pornhub.com/)
+- [x] [Share Videos](http://share-videos.se/)
+- [x] [Tube8](https://www.tube8.com/)
+- [x] [RedTube](https://www.redtube.com/)
+- [ ] [xHamster](https://jp.xhamster.com/)
