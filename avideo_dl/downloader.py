@@ -50,7 +50,10 @@ class Downloader(object):
         space = " " * (100 - p_count)
         arrow = ">"
         per = int(count.value * (100 / self.split_num))
-        print("\r[{}{}{}] {}% ({}/{})".format(progress, arrow, space, per, count.value, self.split_num), end='')
+        print("\r[{}{}{}] {}% ({}/{})".format(progress, arrow,
+                                              space, per,
+                                              count.value,
+                                              self.split_num), end='')
 
     def download(self):
         try:
