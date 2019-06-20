@@ -12,11 +12,12 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('url', help='Specify URL')
     args = parser.parse_args()
-    video_url, title = URLExtractor(args.url).get_video_url()
+    extractor = URLExtractor(args.url)
+    video_url, title = extractor.get_video_url
     print(ascii_moji['start'] + '\r')
-    av = Downloader(video_url, title)
+    dl = Downloader(video_url, title)
     try:
-        file_size = av.download()
+        file_size = dl.download()
     except KeyboardInterrupt:
         os.system('rm -rf *.tmp')
     print('\n\nDownloaded file size: ', file_size, '\n')

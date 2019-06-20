@@ -12,8 +12,8 @@ class ShareVideosExtractor(BaseExtractor):
         title = 'share-videos' + datetime.now().strftime('%Y%m%d%H%M%S')
         request = urllib.request.Request(url=url, headers=headers())
         html = urllib.request.urlopen(request).read().decode('utf-8')
-        iframe = re.findall(r'iframe.*?(?=>)', html)[0]
-        next_url = re.findall(r'(?<=src=").*?(?=")', iframe)[0]
+        iframe = next(iter(re.findall(r'iframe.*?(?=>)', html)))
+        next_url = next(iter(re.findall(r'(?<=src=").*?(?=")', iframe)))
         request = urllib.request.Request(url=next_url, headers=headers())
         html = urllib.request.urlopen(request).read().decode('utf-8')
         video_url = re.findall(r'(?<=source src=").*?(?=">)', html)[1]
