@@ -5,7 +5,7 @@ import urllib.request
 from functools import reduce
 from multiprocessing import Pool, Value, cpu_count
 
-from avideo_dl.utils import headers
+from avideo_dl.utils import headers, progress_bar
 
 
 class Downloader(object):
@@ -42,18 +42,7 @@ class Downloader(object):
         with open('{}.tmp'.format(num), 'wb') as file:
             file.write(binary)
         shared_file_count.value += 1
-        self.progress_bar(shared_file_count)
-
-    def progress_bar(self, count):
-        p_count = int(100 * count.value / self.split_num)
-        progress = "=" * p_count
-        space = " " * (100 - p_count)
-        arrow = ">"
-        per = int(count.value * (100 / self.split_num))
-        print("\r[{}{}{}] {}% ({}/{})".format(progress, arrow,
-                                              space, per,
-                                              count.value,
-                                              self.split_num), end='')
+        progress_bar(shared_file_count.value, self.split_num)
 
     def download(self):
         try:
