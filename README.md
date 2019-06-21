@@ -5,6 +5,8 @@
 
 Fast adult video downloader with no dependent third party libraries.
 
+![Screen shot](https://user-images.githubusercontent.com/13160198/59921981-609f2f00-946a-11e9-9f57-2a1d3ff57650.png)
+
 ## Installation
 ```
 $ pip3 install avideo_dl
