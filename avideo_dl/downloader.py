@@ -1,8 +1,6 @@
 import os
-import sys
 import urllib.error
 import urllib.request
-from functools import reduce
 from multiprocessing import Pool, Value, cpu_count
 
 from avideo_dl.utils import headers, progress_bar
