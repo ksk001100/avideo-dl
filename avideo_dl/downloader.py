@@ -1,6 +1,7 @@
 import os
 import urllib.error
 import urllib.request
+import http
 from multiprocessing import Pool, Value, cpu_count
 
 from avideo_dl.utils import headers, progress_bar
@@ -43,14 +44,19 @@ class Downloader(object):
         progress_bar(shared_file_count.value, self.split_num)
 
     def download(self):
-        try:
-            info = urllib.request.urlopen(self.video_url).info()
-        except urllib.error.HTTPError:
-            req = urllib.request.Request(self.video_url)
-            req.headers.update(headers())
-            info = urllib.request.urlopen(req).info()
-        except AttributeError:
-            exit()
+        while True:
+            try:
+                info = urllib.request.urlopen(self.video_url).info()
+            except urllib.error.HTTPError:
+                req = urllib.request.Request(self.video_url)
+                req.headers.update(headers())
+                info = urllib.request.urlopen(req).info()
+            except http.client.IncompleteRead:
+                continue
+            except AttributeError:
+                exit()
+            else:
+                break
         self.total_length = int(info.get('content-length'))
         self.file_type = info.get('content-type').split('/')[-1]
         self.split_num = self.total_length // 300000
