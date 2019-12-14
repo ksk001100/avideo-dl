@@ -13,7 +13,7 @@ class URLExtractor(object):
 
     def __select_extractor(self):
         service_name = avideo_dl.utils.service_name(self.url)
-        module_name = 'avideo_dl.extractor.' + avideo_dl.utils.snake_case(service_name)
+        module_name = 'avideo_dl.extractor.modules.' + avideo_dl.utils.snake_case(service_name)
         class_name = avideo_dl.utils.camel_case(service_name) + 'Extractor'
         try:
             return getattr(import_module(module_name), class_name)
