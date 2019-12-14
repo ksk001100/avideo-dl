@@ -3,9 +3,8 @@ import re
 import os
 from datetime import datetime
 
-from avideo_dl.extractor.base import BaseExtractor
 
-class XvideosExtractor(BaseExtractor):
+class XvideosExtractor(object):
     @classmethod
     def get_video_url(cls, url):
         html = urllib.request.urlopen(url).read().decode('utf-8')

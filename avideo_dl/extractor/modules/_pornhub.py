@@ -3,11 +3,13 @@ import re
 import os
 import http
 from datetime import datetime
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 
 from avideo_dl.utils import headers
-from avideo_dl.extractor.base import BaseExtractor
 
-class PornhubExtractor(BaseExtractor):
+
+class PornhubExtractor(object):
     @classmethod
     def get_video_url(cls, url):
         while True:

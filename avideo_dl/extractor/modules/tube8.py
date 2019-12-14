@@ -3,9 +3,8 @@ import re
 import os
 from datetime import datetime
 
-from avideo_dl.extractor.base import BaseExtractor
 
-class RedtubeExtractor(BaseExtractor):
+class Tube8Extractor(object):
     @classmethod
     def get_video_url(cls, url):
         title = next(iter(os.path.basename(__file__).split('.'))) + datetime.now().strftime('%Y%m%d%H%M%S')
