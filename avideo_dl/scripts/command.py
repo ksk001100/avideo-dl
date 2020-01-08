@@ -4,6 +4,7 @@ import sys
 import os.path
 import os
 import argparse
+from avideo_dl import VERSION
 from avideo_dl.aa import ascii_moji
 from avideo_dl.downloader import Downloader
 from avideo_dl.extractor import URLExtractor
@@ -15,6 +16,7 @@ def main():
     extractor = URLExtractor(args.url)
     video_url, title = extractor.get_video_url
     print(ascii_moji['start'] + '\r')
+    print('version: ' + VERSION)
     dl = Downloader(video_url, title)
     try:
         file_size = dl.download()

@@ -2,7 +2,8 @@ import os
 import urllib.error
 import urllib.request
 import http
-from multiprocessing import Pool, Value, cpu_count
+from multiprocessing import Value, cpu_count
+from concurrent.futures import ProcessPoolExecutor as PPE
 
 from avideo_dl.utils import headers, progress_bar
 
@@ -15,8 +16,8 @@ class Downloader(object):
     def __init__(self, video_url, title):
         self.video_url = video_url
         self.title = title
-        print('title : {}'.format(self.title))
-        print('video_url : {}\n'.format(self.video_url))
+        print('title: {}'.format(self.title))
+        print('video_url: {}\n'.format(self.video_url))
 
     def split_download(self, args):
         num, start, end = args
@@ -68,12 +69,8 @@ class Downloader(object):
              self.split_num for i in range(self.split_num)]
         args = [(i, 0 if i == 0 else sum(l[:i]) + 1, sum(l[:i]) + val) for i, val in enumerate(l)]
 
-        p = Pool(processes=cpu_count(),
-                 initializer=self.pool_init,
-                 initargs=(Value('i', 0),))
-        p.map(self.split_download, args)
-        p.close()
-        p.join()
+        with PPE(max_workers=cpu_count(), initializer=self.pool_init, initargs=(Value('i', 0),)) as exe:
+            exe.map(self.split_download, args)
 
         with open('{}.{}'.format(self.title, self.file_type), 'wb') as f:
             self.combine(f)

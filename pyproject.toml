@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "avideo_dl"
-version = "0.1.1"
+version = "0.1.2"
 description = "Fast adult video downloader with no dependent third party libraries."
 authors = ["ksk001100 <hm.pudding0715@gmail.com>"]
 license = "MIT"
